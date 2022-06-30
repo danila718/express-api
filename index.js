@@ -3,18 +3,18 @@ import express from 'express';
 const port = 8000;
 const app = express();
 
-// app.all('/hello', (req, res, next) => {
-//     console.log('All');
-//     next();
-// });
-
-// const cb = (req, res, next) => {
-//     console.log('CB');
-//     next();
-// }
-
 app.get('/hello', (req, res) => {
+    // res.type('html');
+    // res.cookie('token', 'sdadada', {
+    //     domain: '',
+    //     path: '/',
+    //     secure: true,
+    //     expires: 6000,
+    // });
+    // res.clearCookie('token');
     res.status(200).json({ success: true });
+    // res.status(404).end();
+    // res.end();
     // res.download('/test.pdf');
 });
 
