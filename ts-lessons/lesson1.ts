@@ -28,4 +28,4 @@ function coord(coord: { lat: number, long?: number }) {
 }
 
 
-console.log(c);
+console.log('lesson1');
