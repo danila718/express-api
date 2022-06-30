@@ -27,5 +27,4 @@ function coord(coord: { lat: number, long?: number }) {
 
 }
 
-
 console.log('lesson1');
