@@ -18,8 +18,8 @@ log<string, number>('sadad', [12]);
 log<HasLength, number>(['s'], [5]);
 
 interface IUser {
-    name: string,
-    age?: number,
+    name: string;
+    age?: number;
     bid: <T>(sum: T) => boolean;
 }
 
