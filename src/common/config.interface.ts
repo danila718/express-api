@@ -1,9 +1,9 @@
 import { IExeptionFilter } from "../errors/exeption.filter.interface.js";
-import { LoggerService } from "../logger/logger.service.js";
+import { ILogger } from "../logger/logger.interface.js";
 import { BaseController } from "./base.controller.js";
 
 export interface IAppConfig {
-    logger: LoggerService,
+    logger: ILogger,
     errorHandler: IExeptionFilter,
     controllers: BaseController[],
 }
