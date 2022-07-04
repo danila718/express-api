@@ -3,5 +3,5 @@ import { BaseController } from "./base.controller.js";
 
 export interface IAppConfig {
     logger: LoggerService,
-    userController: BaseController
+    controllers: BaseController[],
 }

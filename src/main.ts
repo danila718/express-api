@@ -13,7 +13,9 @@ function getConfig(): IAppConfig {
 
     return {
         logger: logger,
-        userController: new UserController(logger),
+        controllers: [
+            new UserController('/users', logger),
+        ],
     };
 }
 

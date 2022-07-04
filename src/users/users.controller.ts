@@ -4,8 +4,8 @@ import { LoggerService } from "../logger/logger.service.js";
 
 export class UserController extends BaseController {
 
-    constructor(logger: LoggerService) {
-        super(logger);
+    constructor(path: string, logger: LoggerService) {
+        super(path, logger);
 
         this.bindRoutes([
             { method: 'post', path: '/login', func: this.login },
