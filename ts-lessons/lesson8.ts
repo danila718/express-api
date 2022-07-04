@@ -1,6 +1,6 @@
 let a8 = 'Привет!';
 
-if (typeof a == 'string') {
+if (typeof a8 == 'string') {
 }
 
 // зависимые типы
