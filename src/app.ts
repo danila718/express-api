@@ -25,8 +25,13 @@ export class App {
         }
     }
 
+    useExeptionFilter() {
+        this.app.use(this.config.errorHandler.catch.bind(this.config.errorHandler));
+    }
+
     public async init() {
         this.bindControllers();
+        this.useExeptionFilter();
         this.server = this.app.listen(this.port);
         // console.log(`Сервер запущен на http://localhost:${this.port}`);
         this.config.logger.log(`Сервер запущен на http://localhost:${this.port}`);

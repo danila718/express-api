@@ -1,5 +1,6 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { BaseController } from "../common/base.controller.js";
+import { HTTPError } from "../errors/http-error.class.js";
 import { LoggerService } from "../logger/logger.service.js";
 
 export class UserController extends BaseController {
@@ -13,14 +14,15 @@ export class UserController extends BaseController {
         ]);
     }
 
-    public login(req: Request, res: Response) {
-        this.ok(res, {
-            success: true,
-            message: 'Login',
-        });
+    public login(req: Request, res: Response, next: NextFunction) {
+        next(new HTTPError(401, 'Ошибка авторизации', 'login'));
+        // this.ok(res, {
+        //     success: true,
+        //     message: 'Login',
+        // });
     }
 
-    public register(req: Request, res: Response) {
+    public register(req: Request, res: Response, next: NextFunction) {
         this.ok(res, {
             success: true,
             message: 'Register',
