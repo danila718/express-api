@@ -21,6 +21,7 @@
   "homepage": "https://github.com/danila718/express-api#readme",
   "dependencies": {
     "express": "^4.18.1",
+    "reflect-metadata": "^0.1.13",
     "tslog": "^3.3.3"
   },
   "devDependencies": {
