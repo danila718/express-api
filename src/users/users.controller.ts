@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { BaseController } from "../common/base.controller.js";
 import { HTTPError } from "../errors/http-error.class.js";
-import { LoggerService } from "../logger/logger.service.js";
+import { ILogger } from "../logger/logger.interface.js";
 
 export class UserController extends BaseController {
 
-    constructor(path: string, logger: LoggerService) {
+    constructor(path: string, logger: ILogger) {
         super(path, logger);
 
         this.bindRoutes([
