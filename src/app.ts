@@ -4,7 +4,6 @@ import { inject, injectable } from 'inversify';
 import { IExeptionFilter } from './errors/exeption.filter.interface.js';
 import { ILogger } from './logger/logger.interface.js';
 import { TYPES } from './types.js';
-import { UserController } from './users/users.controller.js';
 import 'reflect-metadata';
 import { IUserController } from './users/users.interface.js';
 
