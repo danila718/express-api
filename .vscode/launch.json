@@ -5,17 +5,21 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "pwa-node",
+            "type": "node",
             "request": "launch",
-            "name": "run app",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}/dist/main.js",
-            "preLaunchTask": "build:tsc",
-            "outFiles": [
-                "${workspaceFolder}/**/*.js"
-            ]
+            "name": "nodemon",
+            "runtimeExecutable": "${workspaceFolder}/node_modules/nodemon/bin/nodemon.js",
+            "restart": true,
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+            //"skipFiles": [
+            //    "<node_internals>/**"
+            //],
+            //"program": "${workspaceFolder}/dist/main.js",
+            //"preLaunchTask": "build:tsc",
+            //"outFiles": [
+            //    "${workspaceFolder}/**/*.js"
+            //]
         }
     ]
 }
