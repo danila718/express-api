@@ -5,9 +5,10 @@ import { HTTPError } from "../errors/http-error.class.js";
 import { ILogger } from "../logger/logger.interface.js";
 import { TYPES } from "../types.js";
 import 'reflect-metadata';
+import { IUserController } from "./users.interface.js";
 
 @injectable()
-export class UserController extends BaseController {
+export class UserController extends BaseController implements IUserController{
 
     constructor(
         @inject(TYPES.ILogger) loggerService: ILogger
