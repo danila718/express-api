@@ -10,50 +10,50 @@ import { IUserController } from './users/users.interface.js';
 
 @injectable()
 export class App {
-    app: Express;
-    server: Server;
-    port: number;
+  app: Express;
+  server: Server;
+  port: number;
 
-    constructor(
-        @inject(TYPES.ILogger) private logger: ILogger,
-        @inject(TYPES.IUserController) private userController: IUserController,
-        @inject(TYPES.IExeptionFilter) private errorHandler: IExeptionFilter,
-    ) {
-        this.app = express();
-        this.port = 8000;
-    }
+  constructor(
+    @inject(TYPES.ILogger) private logger: ILogger,
+    @inject(TYPES.IUserController) private userController: IUserController,
+    @inject(TYPES.IExeptionFilter) private errorHandler: IExeptionFilter,
+  ) {
+    this.app = express();
+    this.port = 8000;
+  }
 
-    bindControllers() {
-        this.app.use('/users', this.userController.router);
-        // this.logger.log(`${this.userController.constructor.name} binded to App:`);
-        // this.logger.log(this.userController.router.stack.map((layer: any) => {
-        //     const route = layer?.route;
-        //     if (route) {
-        //         return `[${JSON.stringify(route?.methods)}] ${route?.path}`;
-        //     }
-        // }).join('; '), '\n');
+  bindControllers(): void {
+    this.app.use('/users', this.userController.router);
+    // this.logger.log(`${this.userController.constructor.name} binded to App:`);
+    // this.logger.log(this.userController.router.stack.map((layer: any) => {
+    //     const route = layer?.route;
+    //     if (route) {
+    //         return `[${JSON.stringify(route?.methods)}] ${route?.path}`;
+    //     }
+    // }).join('; '), '\n');
 
-        // for (const controller of this.config.controllers) {
-        //     this.app.use(controller.path, controller.router);
-        //     this.logger.log(`${controller.constructor.name} binded to App:`);
-        //     this.logger.log(controller.router.stack.map((layer: any) => {
-        //         const route = layer?.route;
-        //         if (route) {
-        //             return `[${JSON.stringify(route?.methods)}] ${route?.path}`;
-        //         }
-        //     }).join('; '), '\n');
-        // }
-    }
+    // for (const controller of this.config.controllers) {
+    //     this.app.use(controller.path, controller.router);
+    //     this.logger.log(`${controller.constructor.name} binded to App:`);
+    //     this.logger.log(controller.router.stack.map((layer: any) => {
+    //         const route = layer?.route;
+    //         if (route) {
+    //             return `[${JSON.stringify(route?.methods)}] ${route?.path}`;
+    //         }
+    //     }).join('; '), '\n');
+    // }
+  }
 
-    useExeptionFilter() {
-        this.app.use(this.errorHandler.catch.bind(this.errorHandler));
-    }
+  useExeptionFilter(): void {
+    this.app.use(this.errorHandler.catch.bind(this.errorHandler));
+  }
 
-    public async init() {
-        this.bindControllers();
-        this.useExeptionFilter();
-        this.server = this.app.listen(this.port);
-        // console.log(`Сервер запущен на http://localhost:${this.port}`);
-        this.logger.log(`Сервер запущен на http://localhost:${this.port}`);
-    }
+  public async init(): Promise<void> {
+    this.bindControllers();
+    this.useExeptionFilter();
+    this.server = this.app.listen(this.port);
+    // console.log(`Сервер запущен на http://localhost:${this.port}`);
+    this.logger.log(`Сервер запущен на http://localhost:${this.port}`);
+  }
 }
