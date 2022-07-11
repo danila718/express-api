@@ -7,11 +7,16 @@ import { LoggerService } from './logger/logger.service.js';
 import { TYPES } from './types.js';
 import { UserController } from './users/users.controller.js';
 import { IUserController } from './users/users.interface.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 export interface IBootstrapReturn {
   appContainer: Container;
   app: App;
 }
+
+export const __filename = fileURLToPath(import.meta.url);
+export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<ILogger>(TYPES.ILogger).to(LoggerService);

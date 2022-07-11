@@ -6,6 +6,11 @@ import { ILogger } from '../logger/logger.interface.js';
 import { TYPES } from '../types.js';
 import 'reflect-metadata';
 import { IUserController } from './users.interface.js';
+// import fs from 'fs';
+// import { resolve } from 'path';
+// import { __dirname } from '../main.js';
+
+// const data = [];
 
 // class User {}
 // const users = [];
@@ -30,6 +35,7 @@ export class UserController extends BaseController implements IUserController {
   }
 
   public register(req: Request, res: Response, next: NextFunction): void {
+    // data.push(fs.readFileSync(resolve(__dirname, '../1.mp4')));
     this.ok(res, {
       success: true,
       message: 'Register',
