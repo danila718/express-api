@@ -7,6 +7,8 @@ import { TYPES } from '../types.js';
 import 'reflect-metadata';
 import { IUserController } from './users.interface.js';
 
+// class User {}
+// const users = [];
 @injectable()
 export class UserController extends BaseController implements IUserController {
   constructor(@inject(TYPES.ILogger) loggerService: ILogger) {
@@ -20,6 +22,7 @@ export class UserController extends BaseController implements IUserController {
 
   public login(req: Request, res: Response, next: NextFunction): void {
     next(new HTTPError(401, 'Ошибка авторизации', 'login'));
+    // users.push(new User());
     // this.ok(res, {
     //     success: true,
     //     message: 'Login',
