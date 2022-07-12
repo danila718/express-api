@@ -9,6 +9,8 @@ import { UserController } from './users/users.controller.js';
 import { IUserController } from './users/users.interface.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { IUserService } from './users/users.service.interface.js';
+import { UserService } from './users/users.service.js';
 
 export interface IBootstrapReturn {
   appContainer: Container;
@@ -21,6 +23,7 @@ export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<ILogger>(TYPES.ILogger).to(LoggerService);
   bind<IExeptionFilter>(TYPES.IExeptionFilter).to(ExeptionFilter);
+  bind<IUserService>(TYPES.IUserService).to(UserService);
   bind<IUserController>(TYPES.IUserController).to(UserController);
   bind<App>(TYPES.Application).to(App);
 });
