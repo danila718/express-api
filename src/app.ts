@@ -6,6 +6,7 @@ import { ILogger } from './logger/logger.interface.js';
 import { TYPES } from './types.js';
 import 'reflect-metadata';
 import { IUserController } from './users/users.interface.js';
+import bodyParser from 'body-parser';
 
 @injectable()
 export class App {
@@ -20,6 +21,10 @@ export class App {
   ) {
     this.app = express();
     this.port = 8000;
+  }
+
+  bindMiddlewares(): void {
+    this.app.use(bodyParser.json());
   }
 
   bindControllers(): void {
@@ -49,6 +54,7 @@ export class App {
   }
 
   public async init(): Promise<void> {
+    this.bindMiddlewares();
     this.bindControllers();
     this.useExeptionFilter();
     this.server = this.app.listen(this.port);
