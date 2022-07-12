@@ -11,6 +11,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { IUserService } from './users/users.service.interface.js';
 import { UserService } from './users/users.service.js';
+import { IConfigService } from './config/config.service.interface.js';
+import { ConfigService } from './config/config.service.js';
 
 export interface IBootstrapReturn {
   appContainer: Container;
@@ -21,7 +23,8 @@ export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
-  bind<ILogger>(TYPES.ILogger).to(LoggerService);
+  bind<ILogger>(TYPES.ILogger).to(LoggerService).inSingletonScope();
+  bind<IConfigService>(TYPES.IConfigService).to(ConfigService).inSingletonScope();
   bind<IExeptionFilter>(TYPES.IExeptionFilter).to(ExeptionFilter);
   bind<IUserService>(TYPES.IUserService).to(UserService);
   bind<IUserController>(TYPES.IUserController).to(UserController);
