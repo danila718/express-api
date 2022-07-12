@@ -4,12 +4,12 @@ import { BaseController } from '../common/base.controller.js';
 import { HTTPError } from '../errors/http-error.class.js';
 import { ILogger } from '../logger/logger.interface.js';
 import { TYPES } from '../types.js';
-import 'reflect-metadata';
 import { IUserController } from './users.interface.js';
 import { UserLoginDto } from './dto/user-login.dto.js';
 import { UserRegisterDto } from './dto/user-register.dto.js';
 import { User } from './user.entity.js';
 import { IUserService } from './users.service.interface.js';
+import { ValidateMiddleware } from '../common/validate.middleware.js';
 // import fs from 'fs';
 // import { resolve } from 'path';
 // import { __dirname } from '../main.js';
@@ -28,7 +28,12 @@ export class UserController extends BaseController implements IUserController {
 
     this.bindRoutes([
       { method: 'post', path: '/login', func: this.login },
-      { method: 'post', path: '/register', func: this.register },
+      {
+        method: 'post',
+        path: '/register',
+        func: this.register,
+        middlewares: [new ValidateMiddleware(UserRegisterDto)],
+      },
     ]);
   }
 
