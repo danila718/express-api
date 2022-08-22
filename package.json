@@ -9,6 +9,7 @@
     "dev": "nodemon",
     "dev:inspect": "nodemon -e ts,json --exec node --loader ts-node/esm --inspect=localhost:9222 src/main.ts",
     "build": "tsc",
+    "generate": "npx prisma generate",
     "lint": "eslint ./src/**",
     "lint:fix": "eslint ./src/** --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -24,6 +25,7 @@
   },
   "homepage": "https://github.com/danila718/express-api#readme",
   "dependencies": {
+    "@prisma/client": "^4.2.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
     "class-transformer": "^0.5.1",
@@ -45,6 +47,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "nodemon": "^2.0.18",
     "prettier": "^2.7.1",
+    "prisma": "^4.2.1",
     "ts-node": "^10.8.2",
     "typescript": "^4.7.4"
   }

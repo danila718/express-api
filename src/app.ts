@@ -8,6 +8,7 @@ import 'reflect-metadata';
 import { IUserController } from './users/users.interface.js';
 import bodyParser from 'body-parser';
 import { IConfigService } from './config/config.service.interface.js';
+import { PrismaService } from './database/prisma.service.js';
 
 @injectable()
 export class App {
@@ -20,6 +21,7 @@ export class App {
     @inject(TYPES.IUserController) private userController: IUserController,
     @inject(TYPES.IExeptionFilter) private errorHandler: IExeptionFilter,
     @inject(TYPES.IConfigService) private configService: IConfigService,
+    @inject(TYPES.PrismaService) private prismaService: PrismaService,
   ) {
     this.app = express();
     this.port = 8000;
@@ -59,6 +61,7 @@ export class App {
     this.bindMiddlewares();
     this.bindControllers();
     this.useExeptionFilter();
+    await this.prismaService.connect();
     this.server = this.app.listen(this.port);
     // console.log(`Сервер запущен на http://localhost:${this.port}`);
     this.logger.log(`Сервер запущен на http://localhost:${this.port}`);
