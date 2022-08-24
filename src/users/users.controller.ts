@@ -10,6 +10,8 @@ import { UserRegisterDto } from './dto/user-register.dto.js';
 import { User } from './user.entity.js';
 import { IUserService } from './users.service.interface.js';
 import { ValidateMiddleware } from '../common/validate.middleware.js';
+import jsonwebtoken from 'jsonwebtoken';
+import { IConfigService } from '../config/config.service.interface.js';
 // import fs from 'fs';
 // import { resolve } from 'path';
 // import { __dirname } from '../main.js';
@@ -23,6 +25,7 @@ export class UserController extends BaseController implements IUserController {
   constructor(
     @inject(TYPES.ILogger) loggerService: ILogger,
     @inject(TYPES.IUserService) private userService: IUserService,
+    @inject(TYPES.IConfigService) private configService: IConfigService,
   ) {
     super(loggerService);
 
@@ -37,15 +40,19 @@ export class UserController extends BaseController implements IUserController {
     ]);
   }
 
-  public login(req: Request<{}, {}, UserLoginDto>, res: Response, next: NextFunction): void {
-    console.log(req.body);
-
-    next(new HTTPError(401, 'Ошибка авторизации', 'login'));
+  public async login(
+    req: Request<{}, {}, UserLoginDto>,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    // next(new HTTPError(401, 'Ошибка авторизации', 'login'));
     // users.push(new User());
     // this.ok(res, {
     //     success: true,
     //     message: 'Login',
     // });
+    const jwt = await this.signJWT(req.body.email, this.configService.get('SECRET'));
+    this.ok(res, { token: jwt });
   }
 
   public async register(
@@ -58,5 +65,26 @@ export class UserController extends BaseController implements IUserController {
       return next(new HTTPError(422, 'Такой пользователь уже существует'));
     }
     this.ok(res, { email: result.email });
+  }
+
+  private signJWT(email: string, secret: string): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      jsonwebtoken.sign(
+        {
+          email,
+          iat: Math.floor(Date.now() / 1000),
+        },
+        secret,
+        {
+          algorithm: 'HS256',
+        },
+        (err, jwt) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(jwt as string);
+        },
+      );
+    });
   }
 }
