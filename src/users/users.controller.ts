@@ -53,10 +53,17 @@ export class UserController extends BaseController implements IUserController {
     res: Response,
     next: NextFunction,
   ): Promise<void> {
-    const result = await this.userService.createUser(body);
+    let result = null;
+    try {
+      result = await this.userService.createUser(body);
+    } catch (err) {
+      if (err instanceof Error) {
+        return next(new HTTPError(500, 'Internal server error'));
+      }
+    }
     if (!result) {
       return next(new HTTPError(422, 'Такой пользователь уже существует'));
     }
-    this.ok(res, { email: result.email });
+    this.ok(res, { id: result.id, email: result.email });
   }
 }
