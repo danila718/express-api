@@ -5,10 +5,11 @@ import { IExeptionFilter } from './errors/exeption.filter.interface.js';
 import { ILogger } from './logger/logger.interface.js';
 import { TYPES } from './types.js';
 import 'reflect-metadata';
-import { IUserController } from './users/users.interface.js';
+import { IUserController } from './users/users.controller.interface.js';
 import bodyParser from 'body-parser';
 import { IConfigService } from './config/config.service.interface.js';
 import { PrismaService } from './database/prisma.service.js';
+import { AuthMiddleware } from './common/auth.middleware.js';
 
 @injectable()
 export class App {
@@ -29,6 +30,8 @@ export class App {
 
   bindMiddlewares(): void {
     this.app.use(bodyParser.json());
+    const authMiddleware = new AuthMiddleware(this.configService.get('SECRET'));
+    this.app.use(authMiddleware.execute.bind(authMiddleware));
   }
 
   bindControllers(): void {

@@ -4,7 +4,7 @@ import { BaseController } from '../common/base.controller.js';
 import { HTTPError } from '../errors/http-error.class.js';
 import { ILogger } from '../logger/logger.interface.js';
 import { TYPES } from '../types.js';
-import { IUserController } from './users.interface.js';
+import { IUserController } from './users.controller.interface.js';
 import { UserLoginDto } from './dto/user-login.dto.js';
 import { UserRegisterDto } from './dto/user-register.dto.js';
 import { User } from './user.entity.js';
@@ -43,6 +43,12 @@ export class UserController extends BaseController implements IUserController {
         func: this.register,
         middlewares: [new ValidateMiddleware(UserRegisterDto)],
       },
+      {
+        method: 'get',
+        path: '/info',
+        func: this.info,
+        middlewares: [],
+      },
     ]);
   }
 
@@ -78,6 +84,10 @@ export class UserController extends BaseController implements IUserController {
       return next(new HTTPError(422, 'Такой пользователь уже существует'));
     }
     this.ok(res, { id: result.id, email: result.email });
+  }
+
+  public async info({ user }: Request, res: Response, next: NextFunction): Promise<void> {
+    this.ok(res, { email: user });
   }
 
   private signJWT(email: string, secret: string): Promise<string> {

@@ -6,7 +6,7 @@ import { ILogger } from './logger/logger.interface.js';
 import { LoggerService } from './logger/logger.service.js';
 import { TYPES } from './types.js';
 import { UserController } from './users/users.controller.js';
-import { IUserController } from './users/users.interface.js';
+import { IUserController } from './users/users.controller.interface.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { IUserService } from './users/users.service.interface.js';
