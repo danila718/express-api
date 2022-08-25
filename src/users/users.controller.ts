@@ -10,6 +10,7 @@ import { UserRegisterDto } from './dto/user-register.dto.js';
 import { User } from './user.entity.js';
 import { IUserService } from './users.service.interface.js';
 import { ValidateMiddleware } from '../common/validate.middleware.js';
+import { IUsersRepository } from './users.repository.interface.js';
 import jsonwebtoken from 'jsonwebtoken';
 import { IConfigService } from '../config/config.service.interface.js';
 // import fs from 'fs';
@@ -30,7 +31,12 @@ export class UserController extends BaseController implements IUserController {
     super(loggerService);
 
     this.bindRoutes([
-      { method: 'post', path: '/login', func: this.login },
+      {
+        method: 'post',
+        path: '/login',
+        func: this.login,
+        middlewares: [new ValidateMiddleware(UserLoginDto)],
+      },
       {
         method: 'post',
         path: '/register',
@@ -41,18 +47,18 @@ export class UserController extends BaseController implements IUserController {
   }
 
   public async login(
-    req: Request<{}, {}, UserLoginDto>,
+    { body }: Request<{}, {}, UserLoginDto>,
     res: Response,
     next: NextFunction,
   ): Promise<void> {
-    // next(new HTTPError(401, 'Ошибка авторизации', 'login'));
-    // users.push(new User());
-    // this.ok(res, {
-    //     success: true,
-    //     message: 'Login',
-    // });
-    const jwt = await this.signJWT(req.body.email, this.configService.get('SECRET'));
-    this.ok(res, { token: jwt });
+    const userValidated = await this.userService.validateUser(body);
+    if (!userValidated) {
+      return next(new HTTPError(401, 'Ошибка авторизации', 'login'));
+    }
+
+    const jwt = await this.signJWT(body.email, this.configService.get('SECRET'));
+
+    this.ok(res, { success: true, token: jwt });
   }
 
   public async register(
@@ -60,11 +66,18 @@ export class UserController extends BaseController implements IUserController {
     res: Response,
     next: NextFunction,
   ): Promise<void> {
-    const result = await this.userService.createUser(body);
+    let result = null;
+    try {
+      result = await this.userService.createUser(body);
+    } catch (err) {
+      if (err instanceof Error) {
+        return next(new HTTPError(500, 'Internal server error'));
+      }
+    }
     if (!result) {
       return next(new HTTPError(422, 'Такой пользователь уже существует'));
     }
-    this.ok(res, { email: result.email });
+    this.ok(res, { id: result.id, email: result.email });
   }
 
   private signJWT(email: string, secret: string): Promise<string> {
