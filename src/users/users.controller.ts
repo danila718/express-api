@@ -10,6 +10,7 @@ import { UserRegisterDto } from './dto/user-register.dto.js';
 import { User } from './user.entity.js';
 import { IUserService } from './users.service.interface.js';
 import { ValidateMiddleware } from '../common/validate.middleware.js';
+import { IUsersRepository } from './users.repository.interface.js';
 // import fs from 'fs';
 // import { resolve } from 'path';
 // import { __dirname } from '../main.js';
@@ -27,7 +28,12 @@ export class UserController extends BaseController implements IUserController {
     super(loggerService);
 
     this.bindRoutes([
-      { method: 'post', path: '/login', func: this.login },
+      {
+        method: 'post',
+        path: '/login',
+        func: this.login,
+        middlewares: [new ValidateMiddleware(UserLoginDto)],
+      },
       {
         method: 'post',
         path: '/register',
@@ -37,15 +43,17 @@ export class UserController extends BaseController implements IUserController {
     ]);
   }
 
-  public login(req: Request<{}, {}, UserLoginDto>, res: Response, next: NextFunction): void {
-    console.log(req.body);
+  public async login(
+    { body }: Request<{}, {}, UserLoginDto>,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    const userValidated = await this.userService.validateUser(body);
+    if (!userValidated) {
+      return next(new HTTPError(401, 'Ошибка авторизации', 'login'));
+    }
 
-    next(new HTTPError(401, 'Ошибка авторизации', 'login'));
-    // users.push(new User());
-    // this.ok(res, {
-    //     success: true,
-    //     message: 'Login',
-    // });
+    this.ok(res, { success: true, token: 'token' });
   }
 
   public async register(
