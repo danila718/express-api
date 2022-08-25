@@ -7,12 +7,11 @@ import { TYPES } from '../types.js';
 import { IUserController } from './users.controller.interface.js';
 import { UserLoginDto } from './dto/user-login.dto.js';
 import { UserRegisterDto } from './dto/user-register.dto.js';
-import { User } from './user.entity.js';
 import { IUserService } from './users.service.interface.js';
 import { ValidateMiddleware } from '../common/validate.middleware.js';
-import { IUsersRepository } from './users.repository.interface.js';
 import jsonwebtoken from 'jsonwebtoken';
 import { IConfigService } from '../config/config.service.interface.js';
+import { AuthGuard } from '../common/auth.guard.js';
 // import fs from 'fs';
 // import { resolve } from 'path';
 // import { __dirname } from '../main.js';
@@ -47,7 +46,7 @@ export class UserController extends BaseController implements IUserController {
         method: 'get',
         path: '/info',
         func: this.info,
-        middlewares: [],
+        middlewares: [new AuthGuard()],
       },
     ]);
   }
@@ -87,7 +86,11 @@ export class UserController extends BaseController implements IUserController {
   }
 
   public async info({ user }: Request, res: Response, next: NextFunction): Promise<void> {
-    this.ok(res, { email: user });
+    const userModel = await this.userService.getUserInfo(user);
+    if (!userModel) {
+      return next(new HTTPError(500, 'Internal server error'));
+    }
+    this.ok(res, { id: userModel.id, email: userModel.email, name: userModel.name });
   }
 
   private signJWT(email: string, secret: string): Promise<string> {
