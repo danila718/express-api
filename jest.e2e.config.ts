@@ -4,7 +4,7 @@ const config: Config.InitialOptions = {
   verbose: true,
   transform: {},
   preset: 'ts-jest/presets/default-esm',
-  rootDir: './tests',
+  // rootDir: './tests',
   testRegex: '.e2e-spec.ts$',
   extensionsToTreatAsEsm: ['.ts'],
   globals: {
