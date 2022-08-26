@@ -16,6 +16,35 @@ describe('Users e2e', () => {
       .send({ email: 'danila718@gmail.com', password: 'qwerty' });
     expect(res.statusCode).toBe(422);
   });
+
+  it('Login - success', async () => {
+    const res = await request(application.app)
+      .post('/users/login')
+      .send({ email: 'danila718@gmail.com', password: 'qwerty' });
+    expect(res.body.token).not.toBeUndefined();
+  });
+
+  it('Login - error', async () => {
+    const res = await request(application.app)
+      .post('/users/login')
+      .send({ email: 'danila718@gmail.com', password: '1' });
+    expect(res.statusCode).toBe(401);
+  });
+
+  it('Info - success', async () => {
+    const login = await request(application.app)
+      .post('/users/login')
+      .send({ email: 'danila718@gmail.com', password: 'qwerty' });
+    const res = await request(application.app)
+      .get('/users/info')
+      .set('Authorization', `Bearer ${login.body.token}`);
+    expect(res.body.email).toBe('danila718@gmail.com');
+  });
+
+  it('Info - error', async () => {
+    const res = await request(application.app).get('/users/info').set('Authorization', `Bearer 1`);
+    expect(res.statusCode).toBe(401);
+  });
 });
 
 afterAll(() => {
