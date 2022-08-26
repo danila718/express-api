@@ -7,6 +7,7 @@ import { User } from './user.entity.js';
 import { IUsersRepository } from './users.repository.interface.js';
 import { IUserService } from './users.service.interface.js';
 import { UserService } from './users.service.js';
+import { UserLoginDto } from './dto/user-login.dto.js';
 
 const configServiceMock: IConfigService = {
   get: jest.fn(),
@@ -53,8 +54,35 @@ describe('User Service', () => {
     expect(createdUser?.id).toEqual(1);
     expect(createdUser?.password).not.toEqual('1');
   });
-  it('validateUser', async () => {
-    expect(createdUser?.id).toEqual(1);
+
+  it('validateUser - success', async () => {
+    usersRepository.find = jest.fn().mockReturnValueOnce(createdUser);
+
+    const res = await usersService.validateUser({
+      email: 'a@a.ru',
+      password: '1',
+    });
+    expect(res).toBeTruthy();
+  });
+
+  it('validateUser - wrong password', async () => {
+    usersRepository.find = jest.fn().mockReturnValueOnce(createdUser);
+
+    const res = await usersService.validateUser({
+      email: 'a@a.ru',
+      password: '123',
+    });
+    expect(res).toBeFalsy();
+  });
+
+  it('validateUser - wrong user', async () => {
+    usersRepository.find = jest.fn().mockReturnValueOnce(null);
+
+    const res = await usersService.validateUser({
+      email: 'a@a.ru',
+      password: '1',
+    });
+    expect(res).toBeFalsy();
   });
 });
 
