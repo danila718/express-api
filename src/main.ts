@@ -22,6 +22,7 @@ export interface IBootstrapReturn {
   app: App;
 }
 
+// For tsconfig module 'es2020', 'es2022'
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
