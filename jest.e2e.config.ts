@@ -2,8 +2,11 @@ import { type Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
   verbose: true,
+  transform: {},
   preset: 'ts-jest/presets/default-esm',
-  // extensionsToTreatAsEsm: ['.ts'],
+  rootDir: './tests',
+  testRegex: '.e2e-spec.ts$',
+  extensionsToTreatAsEsm: ['.ts'],
   globals: {
     'ts-jest': {
       useESM: true,

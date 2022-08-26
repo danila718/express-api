@@ -7,8 +7,6 @@ import { LoggerService } from './logger/logger.service.js';
 import { TYPES } from './types.js';
 import { UserController } from './users/users.controller.js';
 import { IUserController } from './users/users.controller.interface.js';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { IUserService } from './users/users.service.interface.js';
 import { UserService } from './users/users.service.js';
 import { IConfigService } from './config/config.service.interface.js';
@@ -23,8 +21,8 @@ export interface IBootstrapReturn {
 }
 
 // For tsconfig module 'es2020', 'es2022'
-export const __filename = fileURLToPath(import.meta.url);
-export const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// export const __filename = fileURLToPath(import.meta.url);
+// export const __dirname = dirname(__filename);
 
 export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<ILogger>(TYPES.ILogger).to(LoggerService).inSingletonScope();
@@ -37,13 +35,13 @@ export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<App>(TYPES.Application).to(App);
 });
 
-function bootstrap(): IBootstrapReturn {
+async function bootstrap(): Promise<IBootstrapReturn> {
   const appContainer = new Container();
   appContainer.load(appBindings);
   const app = appContainer.get<App>(TYPES.Application);
-  app.init();
+  await app.init();
 
   return { app, appContainer };
 }
 
-export const { app, appContainer } = bootstrap();
+export const boot = bootstrap();

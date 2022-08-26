@@ -7,7 +7,6 @@ import { User } from './user.entity.js';
 import { IUsersRepository } from './users.repository.interface.js';
 import { IUserService } from './users.service.interface.js';
 import { UserService } from './users.service.js';
-import { UserLoginDto } from './dto/user-login.dto.js';
 
 const configServiceMock: IConfigService = {
   get: jest.fn(),
